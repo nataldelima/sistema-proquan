@@ -11,6 +11,7 @@ class Congregacao extends Model
 
     protected $table = 'congregacao';
     protected $fillable = [
+        'id',
         'nome',
         'endereco',
         'circuito',

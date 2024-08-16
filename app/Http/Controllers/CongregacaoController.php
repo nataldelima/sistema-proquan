@@ -10,32 +10,38 @@ class CongregacaoController extends Controller
     public function index()
     {
         $congregacoes = Congregacao::all();
-        return view('congregacao', ['congregacoes' => $congregacoes]);
+        $title = 'Dados da Congregação';
+        return view('congregacao', compact('congregacoes', 'title'));
     }
     public function create()
     {
 
-        return view('congregacao-create');
+        $title = 'Cadastrar Congregação';
+        return view('congregacao-create', compact('title'));
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'nro' => 'required',
-            'nome' => 'required',
-            'endereco' => 'required',
-            'circuito' => 'required',
-            'supte_circuito' => 'required',
-            'tel_supte_circuito' => 'required'
-        ]);
-        $congregacao = new Congregacao();
-        $congregacao->nro = $request->nro;
-        $congregacao->nome = $request->nome;
-        $congregacao->endereco = $request->endereco;
-        $congregacao->circuito = $request->circuito;
-        $congregacao->supte_circuito = $request->supte_circuito;
-        $congregacao->tel_supte_circuito = $request->tel_supte_circuito;
-        $congregacao->save();
-        return redirect()->route('congregacao.index')->with('success', 'Congregação cadastrada com sucesso!');
+        $validateData = $request->validate(
+            [
+                'id' => 'required|unique:congregacao,id',
+                'nome' => 'required',
+                'endereco' => 'required',
+                'circuito' => 'required',
+                'supteCircuito' => 'required',
+                'telefoneSupteCircuito' => 'required'
+            ],
+            [
+                'id.required' => 'O campo Nº é obrigatório',
+                'id.unique' => 'O Nº informado já existe. Por favor, insira um número diferente.',
+                'nome.required' => 'O campo Nome é obrigatório',
+                'endereco.required' => 'O campo Endereço é obrigatório',
+                'circuito.required' => 'O campo Circuito é obrigatório',
+                'supteCircuito.required' => 'O campo Supte Circuito é obrigatório',
+                'telefoneSupteCircuito.required' => 'O campo Telefone Supte Circuito é obrigatório'
+            ]
+        );
+        Congregacao::create($validateData);
+        return redirect()->route('congregacao')->with('success', 'Congregação cadastrada com sucesso!');
     }
     public function edit($id)
     {

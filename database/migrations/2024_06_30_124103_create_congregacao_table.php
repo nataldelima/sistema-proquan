@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         if (!Schema::hasTable('congregacao')) {
             Schema::create('congregacao', function (Blueprint $table) {
-                $table->id();
+                $table->unsignedBigInteger('id')->primary();
                 $table->string('nome');
                 $table->tinytext('endereco');
                 $table->string('circuito');
                 $table->string('supteCircuito');
+                $table->string('telefoneSupteCircuito');
                 $table->timestamps();
             });
         }

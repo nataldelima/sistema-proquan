@@ -43,6 +43,7 @@
                                 <li><a class="dropdown-item" href="#">Fim de Semana</a></li>
                             </ul>
                         </li>
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Designações Mecânicas</a>
                             <ul class="dropdown-menu">
@@ -70,10 +71,41 @@
                                 <li><a class="dropdown-item" href="#">Locais de saída</a></li>
                             </ul>
                         </li>
+                    </ul>
+
+                    <!-- Informações de Login -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-md-0 me-5 pe-5">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->name }}</a>
+                            <ul class="dropdown-menu">
+
+                                <li><x-responsive-nav-link :href="route('profile.edit')" class="dropdown-item">
+                                        {{ __('Profile') }}
+                                    </x-responsive-nav-link></li>
+                                <li>
+                                    <div class="pt-2 pb-3 space-y-1">
+                                        <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="dropdown-item">
+                                            {{ __('Dashboard') }}
+                                        </x-responsive-nav-link>
+                                </li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+
+                                        <x-responsive-nav-link :href="route('logout')"
+                                            onclick="event.preventDefault();
+                                        this.closest('form').submit();" class="dropdown-item">
+                                            {{ __('Log Out') }}
+                                        </x-responsive-nav-link>
+                                    </form>
+                                </li>
+                            </ul>
                         </li>
+
                     </ul>
 
                 </div>
+            </div>
             </div>
         </nav>
     </header>

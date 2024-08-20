@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GruposDeCampoController;
 use App\Http\Controllers\PublicadoresController;
 use App\Http\Controllers\CongregacaoController;
+use App\Http\Controllers\PdfController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/congregacao/edit/{id}', [CongregacaoController::class, 'edit'])->name('congregacao-edit');
     Route::put('/congregacao/update/{id}', [CongregacaoController::class, 'update'])->name('congregacao-update');
     Route::get('/congregacao/destroy/{id}', [CongregacaoController::class, 'destroy'])->name('congregacao-delete');
+    Route::get('/congregacao/gerar-pdf', [CongregacaoController::class, 'gerarPDF']);
 
 
     //Rotas para operações com Grupos de Campo

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Congregacao;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CongregacaoController extends Controller
 {
@@ -149,6 +150,35 @@ class CongregacaoController extends Controller
         } catch (\Exception $e) {
             Log::error('Erro ao excluir congregação: ' . $e->getMessage());
             return redirect()->route('congregacao')->with('error', 'Não foi possível excluir a congregação.');
+        }
+    }
+
+
+    public function gerarPDF()
+    {
+        try {
+
+            $congregacoes = Congregacao::all();
+            $title = 'Lista de Congregações';
+            $data = [
+                'title' => $title,
+                'congregacoes' => $congregacoes
+            ];
+
+
+            // Tenta carregar a view e gerar o PDF
+            $pdf = PDF::loadView('congregacao-report-all', $data);
+
+            // Retorna o PDF para download
+            return $pdf->download('congregacao-report-all.pdf');
+        } catch (\Exception $e) {
+            // Loga a exceção para análise futura
+            Log::error('Erro ao gerar o PDF: ' . $e->getMessage());
+
+            // Retorna uma resposta de erro
+            return response()->json([
+                'error' => 'Houve um erro ao gerar o PDF. Por favor, tente novamente mais tarde.'
+            ], 500);
         }
     }
 }

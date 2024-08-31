@@ -13,6 +13,48 @@
             padding: 20px;
         }
 
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        thead {
+            font-size: 14px;
+            background-color: #ccc;
+        }
+
+        th {
+            background-color: #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+
         /* Estilos para impressão */
         @media print {
             body {
@@ -23,62 +65,15 @@
             .no-print {
                 display: none;
             }
-
-            .print-header {
-                font-size: 18px;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .print-section {
-                margin-bottom: 20px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
-
-            table,
-            th,
-            td {
-                border: 1px solid black;
-            }
-
-            thead {
-                font-size: 14px;
-                background-color: #ccc;
-            }
-
-            th {
-                background-color: #ccc;
-            }
-
-            th,
-            td {
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #f2f2f2;
-            }
-
-            .footer {
-                text-align: center;
-                margin-top: 20px;
-                font-size: 12px;
-            }
         }
     </style>
+
 </head>
 
 <body>
 
     <div class="print-header">
-        {{$title}}
+        <h1>{{$title}}</h1>
     </div>
 
     @yield('content')

@@ -5,18 +5,19 @@
 
 @foreach($congregacoes as $congregacao)
 
-<table>
+<table class="table table-bordered table-dark">
     <thead>
         <tr>
-            <th>
+            <th> Congregação:</th>
+            <th colspan="2">
                 {{$congregacao->nome}}
             </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th colspan="3">Endereço:</th>
-            <td>{{$congregacao->endereco}}</td>
+            <th>Endereço:</th>
+            <td colspan="2">{{$congregacao->endereco}}</td>
         </tr>
         <tr>
             <th>Circuito:</th>
@@ -31,7 +32,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3">Emitido em</td>
+            <td colspan="3" style="text-align:right">Emitido em</td>
         </tr>
     </tfoot>
 </table>

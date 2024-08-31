@@ -153,6 +153,30 @@ class CongregacaoController extends Controller
         }
     }
 
+    public function gerarPDFIndividual($id)
+    {
+        try {
+            $congregacao = Congregacao::where('id', Crypt::decrypt($id))->first();
+            $title = 'Congregação';
+            $data = [
+                'title' => $title,
+                'congregacao' => $congregacao
+            ];
+
+            // Tenta carregar a view e gerar o PDF
+            $pdf = PDF::loadView('congregacao-report-individual', $data);
+
+            // Retorna o PDF para download
+            return $pdf->download('congregacao-report-' . $congregacao->id . '.pdf');
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
+            return redirect()->route('congregacao')->with('error', 'ID inválido.');
+        } catch (\Exception $e) {
+            Log::error('Erro ao gerar o PDF: ' . $e->getMessage());
+            return redirect()->route('congregacao')->with('error', 'Não foi possível gerar o PDF.');
+        }
+    }
+
 
     public function gerarPDF()
     {

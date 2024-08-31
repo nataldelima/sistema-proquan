@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Publicador</title>
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.min.css') }}">
 </head>
 
 <body>
@@ -76,7 +77,7 @@
                     <!-- Informações de Login -->
                     <ul class="navbar-nav ms-auto mb-2 mb-md-0 me-5 pe-5">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->name }}</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Olá, <b>{{ Auth::user()->name }}</b></a>
                             <ul class="dropdown-menu">
 
                                 <li><x-responsive-nav-link :href="route('profile.edit')" class="dropdown-item">
@@ -122,6 +123,7 @@
 
     </div>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
 </body>
 
 </html>

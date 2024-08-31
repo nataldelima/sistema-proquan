@@ -1,9 +1,6 @@
-@extends('layouts.main')
+@extends('layouts.main-print')
 @section('content')
 <div class="row m-3">
-    <div class="col-10">
-        <h1>{{ $title }}</h1>
-    </div>
 
     @if (!isset($congregacao))
     <div class="alert alert-warning">
@@ -39,13 +36,6 @@
                 </tr>
 
             </table>
-            <div class="row mt-5">
-                <div class="text-center">
-                    <a href="{{route ('congregacao')}}" class="btn btn-dark m-3 p-3 text-center" title="Voltar"><i class="bi bi-arrow-left-square fs-1"></i></a>
-
-                    <a href="{{route ('gerar-pdf-individual', ['id' => Crypt::encrypt($congregacao->id)])}}" class="btn btn-dark m-3 p-3 text-center" title="Exportar registro para arquivo PDF"><i class="bi bi-file-pdf fs-1"></i></a>
-                </div>
-            </div>
         </div>
     </div>
     @endif

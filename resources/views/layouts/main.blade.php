@@ -31,8 +31,8 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Congregação</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/congregacao">Dados da Congregação</a></li>
-                                <li><a class="dropdown-item" href="/grupos-campo/create ">Grupos de Campo</a></li>
+                                <li><a class="dropdown-item" href="{{route ('congregacao')}}">Dados da Congregação</a></li>
+                                <li><a class="dropdown-item" href="{{route ('grupos-campo')}}">Grupos de Campo</a></li>
                                 <li><a class="dropdown-item" href="/publicadores/create">Publicadores</a></li>
                                 <li><a class="dropdown-item" href="#">Esboços de Discursos Públicos</a>
                                 </li>

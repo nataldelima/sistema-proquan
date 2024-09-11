@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
 
     //Rotas para operações com Grupos de Campo
+    Route::get('/grupos-campo', [GruposDeCampoController::class, 'index'])->name('grupos-campo');
     Route::get('/grupos-campo/create', [GruposDeCampoController::class, 'create'])->name('grupos-campo-create');
     Route::post('/grupos-campo', [GruposDeCampoController::class, 'store'])->name('grupos-campo-store');
 

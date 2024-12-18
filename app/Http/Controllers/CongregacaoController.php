@@ -29,7 +29,7 @@ class CongregacaoController extends Controller
                 'title' => 'Cadastrar Congregação',
                 'congregacao' => null,
             ];
-            return view('congregacao-dados', $dados);
+            return view('congregacao-create', $dados);
         } catch (\Exception $e) {
             Log::error('Erro ao carregar o formulário de criação: ' . $e->getMessage());
             return redirect()->route('congregacao')->with('error', 'Não foi possível carregar o formulário.');
@@ -96,7 +96,7 @@ class CongregacaoController extends Controller
                 'congregacao' => $congregacao
             ];
 
-            return view('congregacao-dados', $dados);
+            return view('congregacao-create', $dados);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
             return redirect()->route('congregacao')->with('error', 'ID inválido.');

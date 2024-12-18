@@ -5,7 +5,7 @@
         <h1>{{ $title }}</h1>
     </div>
     <div class="col-3 text-end">
-        <a href="congregacao/create" class="btn btn-primary text-center p-3" title="Cadastrar nova congregação"> <i class="bi bi-pencil-square fs-3"></i>
+        <a href="{{route('congregacao-create') }}" class="btn btn-primary text-center p-3" title="Cadastrar nova congregação"> <i class="bi bi-pencil-square fs-3"></i>
         </a>
 
         <a href="{{route('gerar-pdf') }}" class="btn btn-primary text-center p-3" title="Exportar dados para arquivo em formato PDF"> <i class="bi bi-filetype-pdf fs-3"></i>

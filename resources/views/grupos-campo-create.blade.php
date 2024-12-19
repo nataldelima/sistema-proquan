@@ -12,7 +12,7 @@
     @endif
 
     @if (isset($grupoDeCampo) && $grupoDeCampo != null)
-        <form action="{{ route('grupos-campo-store', $grupoDeCampo->id) }}" method="post">
+        <form action="{{ route('grupos-campo-update', $grupoDeCampo->id) }}" method="post">
             @method('PUT')
             @csrf
             <input type="hidden" name="campo_cript" value={{ Crypt::encrypt($grupoDeCampo->id) }}>

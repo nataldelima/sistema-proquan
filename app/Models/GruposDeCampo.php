@@ -17,6 +17,7 @@ class GruposDeCampo extends Model
         'congregacao_id',
         'dirigente_id',
         'ajudante_id',
+        'nome',
     ];
 
     public function congregacao()

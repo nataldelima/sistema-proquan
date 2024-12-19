@@ -8,7 +8,7 @@
         <a href="{{route('grupos-campo-create')}}" class="btn btn-primary text-center p-3" title="Cadastrar nova congregação"> <i class="bi bi-pencil-square fs-3"></i>
         </a>
 
-        <a href="{{route('gerar-pdf') }}" class="btn btn-primary text-center p-3" title="Exportar dados para arquivo em formato PDF"> <i class="bi bi-filetype-pdf fs-3"></i>
+        <a href="{{route('grupos-campo-all-pdf') }}" class="btn btn-primary text-center p-3" title="Exportar dados para arquivo em formato PDF"> <i class="bi bi-filetype-pdf fs-3"></i>
         </a>
     </div>
 
@@ -84,7 +84,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Não</button>
-                                    <a href="{{ route('congregacao-delete', ['id' => Crypt::encrypt($grupo->id)]) }}"
+                                    <a href="{{ route('grupos-campo-delete', ['id' => Crypt::encrypt($grupo->id)]) }}"
                                         class="btn btn-danger">Sim</a>
                                 </div>
                             </div>

@@ -43,7 +43,7 @@
                 <div class="text-center">
                     <a href="{{route ('congregacao')}}" class="btn btn-dark m-3 p-3 text-center" title="Voltar"><i class="bi bi-arrow-left-square fs-1"></i></a>
 
-                    <a href="{{route ('gerar-pdf-individual', ['id' => Crypt::encrypt($congregacao->id)])}}" class="btn btn-dark m-3 p-3 text-center" title="Exportar registro para arquivo PDF"><i class="bi bi-file-pdf fs-1"></i></a>
+                    <a href="{{route ('congregacao-pdf', ['id' => Crypt::encrypt($congregacao->id)])}}" class="btn btn-dark m-3 p-3 text-center" title="Exportar registro para arquivo PDF"><i class="bi bi-file-pdf fs-1"></i></a>
                 </div>
             </div>
         </div>

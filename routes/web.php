@@ -29,8 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/congregacao/edit/{id}', [CongregacaoController::class, 'edit'])->name('congregacao-edit');
     Route::put('/congregacao/update/{id}', [CongregacaoController::class, 'update'])->name('congregacao-update');
     Route::get('/congregacao/destroy/{id}', [CongregacaoController::class, 'destroy'])->name('congregacao-delete');
-    Route::get('/congregacao/gerar-pdf-individual/{id}', [CongregacaoController::class, 'gerarPDFIndividual'])->name('gerar-pdf-individual');
-    Route::get('/congregacao/gerar-pdf', [CongregacaoController::class, 'gerarPDF'])->name('gerar-pdf');
+    Route::get('/congregacao/gerar-pdf-individual/{id}', [CongregacaoController::class, 'gerarPDFIndividual'])->name('congregacao-pdf');
+    Route::get('/congregacao/gerar-pdf', [CongregacaoController::class, 'gerarPDF'])->name('congregacao-all-pdf');
 
 
     //Rotas para operações com Grupos de Campo
@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/grupos-campo', [GruposDeCampoController::class, 'store'])->name('grupos-campo-store');
     Route::get('/grupos-campo/show/{id}', [GruposDeCampoController::class, 'show'])->name('grupos-campo-show');
     Route::get('/grupos-campo/edit/{id}', [GruposDeCampoController::class, 'edit'])->name('grupos-campo-edit');
+    Route::put('/grupos-campo/update/{id}', [GruposDeCampoController::class, 'update'])->name('grupos-campo-update');
+    Route::get('/grupos-campo/destroy/{id}', [GruposDeCampoController::class, 'destroy'])->name('grupos-campo-delete');
+    Route::get('/grupos-campo/gerar-pdf-individual/{id}', [GruposDeCampoController::class, 'gerarPDFIndividual'])->name('grupos-campo-pdf');
+    Route::get('/grupos-campo/gerar-pdf', [GruposDeCampoController::class, 'gerarPDF'])->name('grupos-campo-all-pdf');
+
 
 
     //Rotas para operações com Publicadores

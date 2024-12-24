@@ -32,7 +32,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" style="text-align:right">Emitido em</td>
+            <td colspan="3" style="text-align:right">Emitido em: {{date('d/m/y h:i:s')}}</td>
         </tr>
     </tfoot>
 </table>

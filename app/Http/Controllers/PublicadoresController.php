@@ -9,7 +9,7 @@ class PublicadoresController extends Controller
 {
     public function create()
     {
-        return view('publicadores-create');
+        return view('publicadores.publicadores-create');
     }
 
     public function store(Request $request)

@@ -64,6 +64,7 @@ class GruposDeCampoController extends Controller
         }
     }
 
+
     public function show($id)
     {
         try {

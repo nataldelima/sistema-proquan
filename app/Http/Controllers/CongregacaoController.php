@@ -18,7 +18,7 @@ class CongregacaoController extends Controller
             return view('congregacao.congregacao', compact('congregacoes', 'title'));
         } catch (\Exception $e) {
             Log::error('Erro ao listar congregações: ' . $e->getMessage());
-            return redirect()->route('home')->with('error', 'Não foi possível carregar a lista de congregações.');
+            return redirect()->route('congregacao.congregacao')->with('error', 'Não foi possível carregar a lista de congregações.');
         }
     }
     public function create()

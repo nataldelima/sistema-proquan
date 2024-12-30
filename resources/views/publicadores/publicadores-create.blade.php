@@ -1,145 +1,164 @@
 @extends('layouts/main')
 @section('content')
+<h1>{{ $title }}</h1>
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
+<div class="alert alert-danger alert-dismissible fade show" id="msg" role="alert">
+    @foreach ($errors->all() as $error)
+    <p>{{ $error }}</p>
+    @endforeach
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
 
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
+@if (isset($publicadores) && $publicadores->count() != null)
 
-<form action="#" method="POST">
+
+<form action="{{route('publicadores-update', $publicadores->id)}}" method="POST">
+    @method('PUT')
     @csrf
-    <div class="row m-3">
+    <input type="hidden" name="campo_cript" value={{Crypt::encrypt($publicadores->id)}}>
+    @else
+    <form action="{{ route('publicadores-store') }}" method="POST" novalidate>
+        @csrf
+        @endif
+        <div class="row m-3 py-3 border-bottom">
 
-        <div class="form-group col-3 my-1">
-            <label for="primeiroNome">Primeiro Nome</label>
-            <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" value="{{ old('primeiroNome') }}" required>
+            <div class="form-group col-3 my-1">
+                <label for="primeiroNome">Primeiro Nome</label>
+                <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" value="{{ old('primeiroNome') }}" required>
+            </div>
+
+            <div class="form-group col-6 my-1">
+                <label for="nomeMeio">Nome do Meio</label>
+                <input type="text" class="form-control" id="nomeMeio" name="nomeMeio" value="{{ old('nomeMeio') }}">
+            </div>
+
+            <div class="form-group col-3 my-1">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome" value="{{ old('sobrenome') }}" required>
+            </div>
         </div>
+        <div class="row m-3  py-3 border-bottom">
 
-        <div class="form-group col-6 my-1">
-            <label for="nomeMeio">Nome do Meio</label>
-            <input type="text" class="form-control" id="nomeMeio" name="nomeMeio" value="{{ old('nomeMeio') }}">
-        </div>
+            <div class="form-group col-3 my-1">
+                <label for="dataNascimento">Data de Nascimento</label>
+                <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" value="{{ old('dataNascimento') }}" required>
+            </div>
 
-        <div class="form-group col-3 my-1">
-            <label for="sobrenome">Sobrenome</label>
-            <input type="text" class="form-control" id="sobrenome" name="sobrenome" value="{{ old('sobrenome') }}" required>
-        </div>
-    </div>
-    <div class="row m-3">
+            <div class="form-group col-3 my-1">
+                <label for="dataBatismo">Data de Batismo</label>
+                <input type="date" class="form-control" id="dataBatismo" name="dataBatismo" value="{{ old('dataBatismo') }}" required>
+            </div>
 
-        <div class="form-group col-5 my-1">
-            <label for="dataNascimento">Data de Nascimento</label>
-            <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" value="{{ old('dataNascimento') }}" required>
-        </div>
-
-        <div class="form-group col-5 my-1">
-            <label for="dataBatismo">Data de Batismo</label>
-            <input type="date" class="form-control" id="dataBatismo" name="dataBatismo" value="{{ old('dataBatismo') }}" required>
-        </div>
-
-        <div class="form-group col-2 my-1">
-            <label for="sexo">Sexo</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="sexo_m" name="sexo" value="M" {{
+            <div class="form-group col-2 my-1">
+                <label for="sexo">Sexo</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="sexo_m" name="sexo" value="M" {{
                             old('sexo')=='M' ? 'checked' : '' }} required>
-                <label class="form-check-label" for="sexo_m">Masculino</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="sexo_f" name="sexo" value="F" {{
+                    <label class="form-check-label" for="sexo_m">Masculino</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="sexo_f" name="sexo" value="F" {{
                             old('sexo')=='F' ? 'checked' : '' }} required>
-                <label class="form-check-label" for="sexo_f">Feminino</label>
+                    <label class="form-check-label" for="sexo_f">Feminino</label>
+                </div>
+            </div>
+
+            <div class="form-group col-4">
+                <label for="grupos_de_campo_id">Grupo de Campo</label>
+                <select class="form-control" id="grupos_de_campo_id" name="grupos_de_campo_id" required>
+                    <option value="">Selecione um grupo</option>
+                    @foreach($gruposDeCampo as $grupo)
+                    <option value="{{ $grupo->id }}" {{ old('grupos_de_campo_id') == $grupo->id ? 'selected' : '' }}>
+                        {{ $grupo->nome }}
+                    </option>
+                    @endforeach
+                </select>
             </div>
         </div>
-    </div>
-    <div class="row m-3">
-        <div class="form-group col-10">
-            <label for="privilegios">Privilégios</label><br>
-            <div class="form-check form-check-inline col-2">
-                <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="ancião" {{ is_array(old('privilegios')) && in_array('ancião', old('privilegios'))
+        <div class="row m-3  py-3 border-bottom">
+            <div class="form-group col-10">
+                <label for="privilegios">Privilégios</label><br>
+                <div class="form-check form-check-inline col-2">
+                    <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="ancião" {{ is_array(old('privilegios')) && in_array('ancião', old('privilegios'))
                             ? 'checked' : '' }}>
-                <label class="form-check-label" for="privilegio1">Ancião</label>
-            </div>
-            <div class="form-check form-check-inline  col-4">
-                <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="servo ministerial" {{ is_array(old('privilegios')) && in_array('servo ministerial',
+                    <label class="form-check-label" for="privilegio1">Ancião</label>
+                </div>
+                <div class="form-check form-check-inline  col-4">
+                    <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="servo ministerial" {{ is_array(old('privilegios')) && in_array('servo ministerial',
                             old('privilegios')) ? 'checked' : '' }}>
-                <label class="form-check-label" for="privilegio2">Servo Ministerial</label>
-            </div>
-            <div class="form-check form-check-inline  col-4">
-                <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="pioneiro regular" {{ is_array(old('privilegios')) && in_array('pioneiro regular',
+                    <label class="form-check-label" for="privilegio2">Servo Ministerial</label>
+                </div>
+                <div class="form-check form-check-inline  col-4">
+                    <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="pioneiro regular" {{ is_array(old('privilegios')) && in_array('pioneiro regular',
                             old('privilegios')) ? 'checked' : '' }}>
-                <label class="form-check-label" for="privilegio3">Pioneiro Regular</label>
+                    <label class="form-check-label" for="privilegio3">Pioneiro Regular</label>
+                </div>
             </div>
-        </div>
-        <div class="form-group col-2 my-1">
-            <label for="ativo">Ativo: </label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="ativo_s" name="ativo" value="1" {{
+            <div class="form-group col-2 my-1">
+                <label for="ativo">Ativo: </label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="ativo_s" name="ativo" value="1" {{
                             old('ativo')=='1' ? 'checked' : '' }} required>
-                <label class="form-check-label" for="ativo_s">Sim</label>
+                    <label class="form-check-label" for="ativo_s">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="ativo_n" name="ativo" value="0" {{
+                            old('ativo')=='0' ? 'checked' : '' }} required>
+                    <label class="form-check-label" for="ativo_n">Não</label>
+                </div>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="ativo_n" name="ativo" value="F" {{
-                            old('ativo')=='N' ? 'checked' : '' }} required>
-                <label class="form-check-label" for="ativo_n">Não</label>
+
+        </div>
+
+        <div class="row m-3  py-3 border-bottom">
+
+            <div class="col-8">
+                <label for="endereco">Endereço</label>
+                <textarea class="form-control" id="endereco" name="endereco" value="{{ old('endereco') }}" required></textarea>
+            </div>
+
+            <div class="form-group col-4">
+                <label for="telefone">Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" value="{{ old('telefone') }}" required>
             </div>
         </div>
+        <div class="row m-3 border-bottom pb-3">
+            <div class="form-group col-3">
+                <label for="contatoEmergencia">Contato de Emergência</label>
+                <input type="text" class="form-control" id="contatoEmergencia" name="contatoEmergencia" value="{{ old('contatoEmergencia') }}" required>
+            </div>
 
-    </div>
+            <div class="form-group col-4">
+                <label for="telContatoEmergencia">Telefone do Contato de Emergência</label>
+                <input type="text" class="form-control" id="telContatoEmergencia" name="telContatoEmergencia" value="{{ old('telContatoEmergencia') }}" required>
+            </div>
 
-    <div class="row m-3">
+            <div class="form-group col-4">
+                <label for="contatoEmergenciaEhTj">O contato de emergência é Testemunha de Jeová?</label>
 
-        <div class="col-8">
-            <label for="endereco">Endereço</label>
-            <textarea class="form-control" id="endereco" name="endereco" value="{{ old('endereco') }}" required></textarea>
-        </div>
-
-        <div class="form-group col-4">
-            <label for="telefone">Telefone</label>
-            <input type="text" class="form-control" id="telefone" name="telefone" value="{{ old('telefone') }}" required>
-        </div>
-    </div>
-    <div class="row m-3 border-bottom pb-3">
-        <div class="form-group col-3">
-            <label for="contatoEmergencia">Contato de Emergência</label>
-            <input type="text" class="form-control" id="contatoEmergencia" name="contatoEmergencia" value="{{ old('contatoEmergencia') }}" required>
-        </div>
-
-        <div class="form-group col-4">
-            <label for="telContatoEmergencia">Telefone do Contato de Emergência</label>
-            <input type="text" class="form-control" id="telContatoEmergencia" name="telContatoEmergencia" value="{{ old('telContatoEmergencia') }}" required>
-        </div>
-
-        <div class="form-group col-4">
-            <label for="contatoEmergenciaEhTj">O contato de emergência é Testemunha de Jeová?</label>
-
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_s" name="contatoEmergenciaEhTj" value="S" {{ old('contatoEmergenciaEhTj')=='1' ? 'checked' : ''
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_s" name="contatoEmergenciaEhTj" value="1" {{ old('contatoEmergenciaEhTj')=='1' ? 'checked' : ''
                             }} required>
-                <label class="form-check-label" for="contatoEmergenciaEhTj_m">Sim</label>
+                    <label class="form-check-label" for="contatoEmergenciaEhTj_m">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_n" name="contatoEmergenciaEhTj" value="0" {{
+                            old('contatoEmergenciaEhTj')=='0' ? 'checked' : '' }} required>
+                    <label class="form-check-label" for="contatoEmergenciaEhTj_f">Não</label>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_n" name="contatoEmergenciaEhTj" value="N {{
-                            old('contatoEmergenciaEhTj')=='0' ? 'checked' : '' }} required">
-                <label class="form-check-label" for="contatoEmergenciaEhTj_f">Não</label>
+
+        </div>
+        <div class="row m-3 text-center">
+            <div class="col">
+                <div class="col-12">
+                    <input type="submit" value="Salvar" class="btn btn-dark m-3 p-3">
+                    <a href="{{ route('publicadores') }}" class="btn btn-danger m-3 p-3">Cancelar</a>
+
+                </div>
             </div>
         </div>
+    </form>
 
-    </div>
-    <div class="row m-3 text-center">
-        <div class="col">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-    </div>
-</form>
-
-@endsection
+    @endsection

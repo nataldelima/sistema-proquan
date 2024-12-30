@@ -25,11 +25,17 @@ class Publicadores extends Model
         'telContatoEmergencia',
         'contatoEmergenciaEhTj',
         'ativo',
+        'grupos_de_campo_id'
+    ];
+
+    protected $casts = [
+        'privilegios' => 'array',
+        'ativo' => 'boolean',
+        'contatoEmergenciaEhTj' => 'boolean'
     ];
 
     public function grupoDeCampo()
     {
-        return $this->belongsTo(GruposDeCampo::class, 'gruposdecampo_id');
+        return $this->belongsTo(GruposDeCampo::class, 'grupos_de_campo_id');
     }
 }
-

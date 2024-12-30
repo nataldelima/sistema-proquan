@@ -45,10 +45,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/grupos-campo/gerar-pdf', [GruposDeCampoController::class, 'gerarPDF'])->name('grupos-campo-all-pdf');
 
 
-
     //Rotas para operações com Publicadores
+    Route::get('/publicadores', [PublicadoresController::class, 'index'])->name('publicadores');
     Route::get('/publicadores/create', [PublicadoresController::class, 'create'])->name('publicadores-create');
     Route::post('/publicadores', [PublicadoresController::class, 'store'])->name('publicadores-store');
+    Route::get('/publicadores/show/{id}', [PublicadoresController::class, 'show'])->name('publicadores-show');
+    Route::get('/publicadores/edit/{id}', [PublicadoresController::class, 'edit'])->name('publicadores-edit');
+    Route::put('/publicadores/update/{id}', [PublicadoresController::class, 'update'])->name('publicadores-update');
+    Route::get('/publicadores/destroy/{id}', [PublicadoresController::class, 'destroy'])->name('publicadores-delete');
+    Route::get('/publicadores/gerar-pdf-individual/{id}', [PublicadoresController::class, 'gerarPDFIndividual'])->name('publicadores-pdf');
+    Route::get('/publicadores/gerar-pdf', [PublicadoresController::class, 'gerarPDF'])->name('publicadores-all-pdf');
 });
 
 require __DIR__ . '/auth.php';

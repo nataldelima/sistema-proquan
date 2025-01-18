@@ -57,10 +57,10 @@ class GruposDeCampoController extends Controller
                 ]
             );
             GruposDeCampo::create($validatedData);
-            return redirect()->route('grupos-campo.grupos-campo')->with('success', 'Grupo de Campo cadastrado com sucesso.');
+            return redirect()->route('grupos-campo')->with('success', 'Grupo de Campo cadastrado com sucesso.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
+            return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
 
@@ -77,7 +77,7 @@ class GruposDeCampoController extends Controller
             return view('grupos-campo.grupos-campo-show', $dados);
         } catch (\Exception $e) {
             Log::error('Erro ao visualizar grupo de campo: ' . $e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
+            return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
     public function edit($id)
@@ -92,7 +92,7 @@ class GruposDeCampoController extends Controller
             return view('grupos-campo.grupos-campo-create', $dados);
         } catch (\Exception $e) {
             Log::error('Erro ao editar grupo de campo: ' . $e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
+            return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
 
@@ -115,12 +115,12 @@ class GruposDeCampoController extends Controller
             );
             $gruposDeCampo = GruposDeCampo::findOrFail($id);
             $gruposDeCampo->update($validatedData);
-            return redirect()->route('grupos-campo.grupos-campo')->with('success', 'Grupo de Campo atualizado com sucesso.');
+            return redirect()->route('grupos-campo')->with('success', 'Grupo de Campo atualizado com sucesso.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
             Log::error('Erro ao atualizar grupo de campo: ' . $e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
+            return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
 
@@ -128,13 +128,13 @@ class GruposDeCampoController extends Controller
     {
         try {
             GruposDeCampo::where('id', Crypt::decrypt($id))->delete();
-            return redirect()->route('grupos-campo.grupos-campo')->with('success', 'Grupo de Campo excluído com sucesso.');
+            return redirect()->route('grupos-campo')->with('success', 'Grupo de Campo excluído com sucesso.');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'ID inválido.');
+            return redirect()->route('grupos-campo')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao excluir grupo de campo: ' . $e->getMessage());
-            return redirect()->route('grupos-campo.grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
+            return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
 

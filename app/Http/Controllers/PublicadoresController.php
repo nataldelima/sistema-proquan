@@ -21,7 +21,7 @@ class PublicadoresController extends Controller
             return view('publicadores.publicadores', compact('publicadores', 'title', 'gruposDeCampo'));
         } catch (\Exception $e) {
             Log::error('Erro ao listar publicadores: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível carregar a lista de publicadores.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível carregar a lista de publicadores.');
         }
     }
 
@@ -32,14 +32,14 @@ class PublicadoresController extends Controller
         try {
             $dados = [
                 'title' => 'Cadastrar Publicadores',
-                'publicadores' => null,
+                'publicador' => null,
                 'gruposDeCampo' => GruposDeCampo::all(),
             ];
 
             return view('publicadores.publicadores-create', $dados);
         } catch (\Exception $e) {
             Log::error('Erro ao criar publicador: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível carregar a lista de publicadores.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível carregar a lista de publicadores.');
         }
     }
 
@@ -57,13 +57,14 @@ class PublicadoresController extends Controller
                     'dataBatismo' => 'required|date',
                     'sexo' => 'required|in:M,F',
                     'privilegios' => 'nullable|array',
+                    'privilegios.*' => 'string',
+                    'grupos_de_campo_id' => 'required|exists:grupos_de_campo,id',
                     'endereco' => 'required|string|max:255',
                     'telefone' => 'required|string|max:255',
                     'contatoEmergencia' => 'required|string|max:255',
                     'telContatoEmergencia' => 'required|string|max:255',
                     'contatoEmergenciaEhTj' => 'required|boolean',
                     'ativo' => 'required|boolean',
-                    'grupos_de_campo_id' => 'required|exists:grupos_de_campo,id',
                 ],
                 [
                     'primeiroNome.required' => 'O campo Primeiro Nome é obrigatório.',
@@ -85,10 +86,14 @@ class PublicadoresController extends Controller
             // Converter o array de privilégios para string JSON antes de salvar
             if (isset($validadeData['privilegios'])) {
                 $validadeData['privilegios'] = json_encode($validadeData['privilegios']);
+            } else {
+
+                $validadeData['privilegios'] = json_encode([]);
             }
 
+
             Publicadores::create($validadeData);
-            return redirect()->route('publicadores.publicadores')->with('success', 'Publicador criado com sucesso.');
+            return redirect()->route('publicadores')->with('success', 'Publicador criado com sucesso.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Erro ao criar publicador: ' . $e->getMessage());
             return redirect()->route('publicadores-create')->with('error', 'Não foi possível criar o publicador.');
@@ -105,13 +110,13 @@ class PublicadoresController extends Controller
             $publicador = Publicadores::where('id', Crypt::decrypt($id))->first();
             $dados = [
                 'title' => 'Visualizar Publicador',
-                'publicador' => $publicador
+                'publicadores' => $publicador
             ];
 
             return view('publicadores.publicadores-show', $dados);
         } catch (\Exception $e) {
             Log::error('Erro ao mostrar publicador: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível mostrar o publicador.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível mostrar o publicador.');
         }
     }
     //Função edit
@@ -121,16 +126,17 @@ class PublicadoresController extends Controller
             $publicador = Publicadores::where('id', Crypt::decrypt($id))->first();
             $dados = [
                 'title' => 'Editar Publicador',
-                'publicador' => $publicador
+                'publicador' => $publicador,
+                'gruposDeCampo' => GruposDeCampo::all()
             ];
 
-            return view('publicadores.publicadores-edit', $dados);
+            return view('publicadores.publicadores-create', $dados);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'ID inválido.');
+            return redirect()->route('publicadores')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao editar publicador: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível editar o publicador.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível editar o publicador.');
         }
     }
 
@@ -149,6 +155,8 @@ class PublicadoresController extends Controller
                     'dataBatismo' => 'required|date',
                     'sexo' => 'required|in:M,F',
                     'privilegios' => 'nullable|array',
+                    'privilegios.*' => 'string',
+                    'grupos_de_campo_id' => 'required|exists:grupos_de_campo,id',
                     'endereco' => 'required|string|max:255',
                     'telefone' => 'required|string|max:255',
                     'contatoEmergencia' => 'required|string|max:255',
@@ -171,16 +179,18 @@ class PublicadoresController extends Controller
                 ]
             );
 
-
             $publicador = Publicadores::findOrFail($id);
+
+            $validateData['privilegios'] = $request->input('privilegios', []);
+
             $publicador->update($validateData);
-            return redirect()->route('publicadores.publicadores')->with('success', 'Publicador atualizado com sucesso.');
+            return redirect()->route('publicadores')->with('success', 'Publicador atualizado com sucesso.');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'ID inválido.');
+            return redirect()->route('publicadores')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao atualizar publicador: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível atualizar o publicador.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível atualizar o publicador.');
         }
     }
 
@@ -189,13 +199,13 @@ class PublicadoresController extends Controller
     {
         try {
             Publicadores::where('id', Crypt::decrypt($id))->delete();
-            return redirect()->route('publicadores.publicadores')->with('success', 'Publicador excluído com sucesso.');
+            return redirect()->route('publicadores')->with('success', 'Publicador excluído com sucesso.');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'ID inválido.');
+            return redirect()->route('publicadores')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao excluir publicador: ' . $e->getMessage());
-            return redirect()->route('publicadores.publicadores')->with('error', 'Não foi possível excluir o publicador.');
+            return redirect()->route('publicadores')->with('error', 'Não foi possível excluir o publicador.');
         }
     }
 }

@@ -41,11 +41,11 @@
             @foreach ($gruposDeCampo as $grupo)
             <tr>
                 <td><a style="text-decoration: none"
-                        href="{{ route('congregacao-show', ['id' => Crypt::encrypt($grupo->id)]) }}">{{ $grupo->id }}</a>
+                        href="{{ route('grupos-campo-show', ['id' => Crypt::encrypt($grupo->id)]) }}">{{ $grupo->id }}</a>
                 </td>
 
                 <td><a style="text-decoration: none"
-                        href="{{ route('congregacao-show', ['id' => Crypt::encrypt($grupo->id)]) }}">{{ $grupo->nome }}</a>
+                        href="{{ route('grupos-campo-show', ['id' => Crypt::encrypt($grupo->id)]) }}">{{ $grupo->nome }}</a>
                 </td>
 
                 <td class="text-end">

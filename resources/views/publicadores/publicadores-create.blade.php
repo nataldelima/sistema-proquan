@@ -10,13 +10,13 @@
 </div>
 @endif
 
-@if (isset($publicadores) && $publicadores->count() != null)
+@if (isset($publicador) && $publicador->count() != null)
 
 
-<form action="{{route('publicadores-update', $publicadores->id)}}" method="POST">
+<form action="{{route('publicadores-update', $publicador->id)}}" method="POST">
     @method('PUT')
     @csrf
-    <input type="hidden" name="campo_cript" value={{Crypt::encrypt($publicadores->id)}}>
+    <input type="hidden" name="campo_cript" value={{Crypt::encrypt($publicador->id)}}>
     @else
     <form action="{{ route('publicadores-store') }}" method="POST" novalidate>
         @csrf
@@ -25,41 +25,41 @@
 
             <div class="form-group col-3 my-1">
                 <label for="primeiroNome">Primeiro Nome</label>
-                <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" value="{{ old('primeiroNome') }}" required>
+                <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" value="{{ old('primeiroNome') ?? $publicador->primeiroNome ?? '' }}" required>
             </div>
 
             <div class="form-group col-6 my-1">
                 <label for="nomeMeio">Nome do Meio</label>
-                <input type="text" class="form-control" id="nomeMeio" name="nomeMeio" value="{{ old('nomeMeio') }}">
+                <input type="text" class="form-control" id="nomeMeio" name="nomeMeio" value="{{ old('nomeMeio') ?? $publicador->nomeMeio ?? ''}}">
             </div>
 
             <div class="form-group col-3 my-1">
                 <label for="sobrenome">Sobrenome</label>
-                <input type="text" class="form-control" id="sobrenome" name="sobrenome" value="{{ old('sobrenome') }}" required>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome" value="{{ old('sobrenome') ?? $publicador->sobrenome ?? ''}}" required>
             </div>
         </div>
         <div class="row m-3  py-3 border-bottom">
 
             <div class="form-group col-3 my-1">
                 <label for="dataNascimento">Data de Nascimento</label>
-                <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" value="{{ old('dataNascimento') }}" required>
+                <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" value="{{ old('dataNascimento') ?? $publicador->dataNascimento ?? '' }}" required>
             </div>
 
             <div class="form-group col-3 my-1">
                 <label for="dataBatismo">Data de Batismo</label>
-                <input type="date" class="form-control" id="dataBatismo" name="dataBatismo" value="{{ old('dataBatismo') }}" required>
+                <input type="date" class="form-control" id="dataBatismo" name="dataBatismo" value="{{ old('dataBatismo') ?? $publicador->dataBatismo ?? ''}}" required>
             </div>
 
             <div class="form-group col-2 my-1">
                 <label for="sexo">Sexo</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="sexo_m" name="sexo" value="M" {{
-                            old('sexo')=='M' ? 'checked' : '' }} required>
+                    <input class="form-check-input" type="radio" id="sexo_m" name="sexo" value="M"
+                        {{ old('sexo') == 'M' || (isset($publicador) && $publicador->sexo == 'M') ? 'checked' : '' }} required>
                     <label class="form-check-label" for="sexo_m">Masculino</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="sexo_f" name="sexo" value="F" {{
-                            old('sexo')=='F' ? 'checked' : '' }} required>
+                    <input class="form-check-input" type="radio" id="sexo_f" name="sexo" value="F"
+                        {{ old('sexo') == 'F' || (isset($publicador) && $publicador->sexo == 'F') ? 'checked' : '' }} required>
                     <label class="form-check-label" for="sexo_f">Feminino</label>
                 </div>
             </div>
@@ -67,12 +67,16 @@
             <div class="form-group col-4">
                 <label for="grupos_de_campo_id">Grupo de Campo</label>
                 <select class="form-control" id="grupos_de_campo_id" name="grupos_de_campo_id" required>
-                    <option value="">Selecione um grupo</option>
+                    <option value="" disabled>Selecione um grupo</option>
                     @foreach($gruposDeCampo as $grupo)
-                    <option value="{{ $grupo->id }}" {{ old('grupos_de_campo_id') == $grupo->id ? 'selected' : '' }}>
+                    <option value="{{ $grupo->id }}"
+                        {{ (old('grupos_de_campo_id') == $grupo->id || (isset($publicador) && $publicador->grupos_de_campo_id == $grupo->id)) ? 'selected' : '' }}>
                         {{ $grupo->nome }}
+
                     </option>
                     @endforeach
+
+
                 </select>
             </div>
         </div>
@@ -80,31 +84,31 @@
             <div class="form-group col-10">
                 <label for="privilegios">Privilégios</label><br>
                 <div class="form-check form-check-inline col-2">
-                    <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="ancião" {{ is_array(old('privilegios')) && in_array('ancião', old('privilegios'))
-                            ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="anciao"
+                        {{ (is_array(old('privilegios')) && in_array('anciao', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('anciao', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio1">Ancião</label>
                 </div>
-                <div class="form-check form-check-inline  col-4">
-                    <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="servo ministerial" {{ is_array(old('privilegios')) && in_array('servo ministerial',
-                            old('privilegios')) ? 'checked' : '' }}>
+                <div class="form-check form-check-inline col-4">
+                    <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="servo_ministerial"
+                        {{ (is_array(old('privilegios')) && in_array('servo_ministerial', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('servo_ministerial', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio2">Servo Ministerial</label>
                 </div>
-                <div class="form-check form-check-inline  col-4">
-                    <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="pioneiro regular" {{ is_array(old('privilegios')) && in_array('pioneiro regular',
-                            old('privilegios')) ? 'checked' : '' }}>
+                <div class="form-check form-check-inline col-4">
+                    <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="pioneiro_regular"
+                        {{ (is_array(old('privilegios')) && in_array('pioneiro_regular', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('pioneiro_regular', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio3">Pioneiro Regular</label>
                 </div>
             </div>
             <div class="form-group col-2 my-1">
                 <label for="ativo">Ativo: </label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="ativo_s" name="ativo" value="1" {{
-                            old('ativo')=='1' ? 'checked' : '' }} required>
+                    <input class="form-check-input" type="radio" id="ativo_s" name="ativo" value="1"
+                        {{ old('ativo') == '1' || (isset($publicador) && $publicador->ativo == 1) ? 'checked' : '' }} required>
                     <label class="form-check-label" for="ativo_s">Sim</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="ativo_n" name="ativo" value="0" {{
-                            old('ativo')=='0' ? 'checked' : '' }} required>
+                    <input class="form-check-input" type="radio" id="ativo_n" name="ativo" value="0"
+                        {{ old('ativo') == '0' || (isset($publicador) && $publicador->ativo == 0) ? 'checked' : '' }} required>
                     <label class="form-check-label" for="ativo_n">Não</label>
                 </div>
             </div>
@@ -115,37 +119,37 @@
 
             <div class="col-8">
                 <label for="endereco">Endereço</label>
-                <textarea class="form-control" id="endereco" name="endereco" value="{{ old('endereco') }}" required></textarea>
+                <textarea class="form-control" id="endereco" name="endereco" required>{{ old('endereco') ?? $publicador->endereco ?? ''}}</textarea>
             </div>
 
             <div class="form-group col-4">
                 <label for="telefone">Telefone</label>
-                <input type="text" class="form-control" id="telefone" name="telefone" value="{{ old('telefone') }}" required>
+                <input type="text" class="form-control" id="telefone" name="telefone" value="{{ old('telefone') ?? $publicador->telefone ?? ''}}" required>
             </div>
         </div>
         <div class="row m-3 border-bottom pb-3">
             <div class="form-group col-3">
                 <label for="contatoEmergencia">Contato de Emergência</label>
-                <input type="text" class="form-control" id="contatoEmergencia" name="contatoEmergencia" value="{{ old('contatoEmergencia') }}" required>
+                <input type="text" class="form-control" id="contatoEmergencia" name="contatoEmergencia" value="{{ old('contatoEmergencia') ?? $publicador->contatoEmergencia ?? ''}}" required>
             </div>
 
             <div class="form-group col-4">
                 <label for="telContatoEmergencia">Telefone do Contato de Emergência</label>
-                <input type="text" class="form-control" id="telContatoEmergencia" name="telContatoEmergencia" value="{{ old('telContatoEmergencia') }}" required>
+                <input type="text" class="form-control" id="telContatoEmergencia" name="telContatoEmergencia" value="{{ old('telContatoEmergencia') ?? $publicador->telContatoEmergencia ?? '' }}" required>
             </div>
 
             <div class="form-group col-4">
                 <label for="contatoEmergenciaEhTj">O contato de emergência é Testemunha de Jeová?</label>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_s" name="contatoEmergenciaEhTj" value="1" {{ old('contatoEmergenciaEhTj')=='1' ? 'checked' : ''
-                            }} required>
-                    <label class="form-check-label" for="contatoEmergenciaEhTj_m">Sim</label>
+                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_s" name="contatoEmergenciaEhTj" value="1"
+                        {{ old('contatoEmergenciaEhTj') == '1' || (isset($publicador) && $publicador->contatoEmergenciaEhTj == 1) ? 'checked' : '' }} required>
+                    <label class="form-check-label" for="contatoEmergenciaEhTj_s">Sim</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_n" name="contatoEmergenciaEhTj" value="0" {{
-                            old('contatoEmergenciaEhTj')=='0' ? 'checked' : '' }} required>
-                    <label class="form-check-label" for="contatoEmergenciaEhTj_f">Não</label>
+                    <input class="form-check-input" type="radio" id="contatoEmergenciaEhTj_n" name="contatoEmergenciaEhTj" value="0"
+                        {{ old('contatoEmergenciaEhTj') == '0' || (isset($publicador) && $publicador->contatoEmergenciaEhTj == 0) ? 'checked' : '' }} required>
+                    <label class="form-check-label" for="contatoEmergenciaEhTj_n">Não</label>
                 </div>
             </div>
 

@@ -45,7 +45,7 @@
                 </td>
 
                 <td><a style="text-decoration: none"
-                        href="{{ route('congregacao-show', ['id' => Crypt::encrypt($publicador->id)]) }}">{{$publicador->grupoDeCampo->nome}}</a>
+                        href="{{ route('publicadores-show', ['id' => Crypt::encrypt($publicador->id)]) }}">{{$publicador->grupoDeCampo->nome}}</a>
                 </td>
 
                 <td class="text-end">
@@ -82,7 +82,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Não</button>
-                                    <a href="{{ route('grupos-campo-delete', ['id' => Crypt::encrypt($publicador->id)]) }}"
+                                    <a href="{{ route('publicadores-delete', ['id' => Crypt::encrypt($publicador->id)]) }}"
                                         class="btn btn-danger">Sim</a>
                                 </div>
                             </div>

@@ -12,7 +12,7 @@
             <table class="table table-striped">
                 <tr>
                     <th>Número: </th>
-                    <td>{{ $gruposDeCampo->id }}</td>
+                    <td>{{ $gruposDeCampo->nro }}</td>
                 </tr>
                 <tr>
                     <th>Nome:</th>

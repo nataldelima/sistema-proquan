@@ -15,7 +15,7 @@ class GruposDeCampoController extends Controller
     public function index()
     {
         try {
-            $gruposDeCampo = GruposDeCampo::all();
+            $gruposDeCampo = GruposDeCampo::orderBy('nro')->get();
             $title = 'Grupos de Campo';
             $congregacoes = Congregacao::all();
             return view('grupos-campo.grupos-campo', compact('gruposDeCampo', 'title', 'congregacoes'));
@@ -27,10 +27,26 @@ class GruposDeCampoController extends Controller
     public function create()
     {
         try {
+
+            // Busca todos os números existentes em ordem crescente
+            $numerosExistentes = GruposDeCampo::orderBy('nro', 'asc')->pluck('nro')->toArray();
+
+            // Calcula o menor número disponível
+            $proximoNro = 1;
+            foreach ($numerosExistentes as $nro) {
+                if ($nro == $proximoNro) {
+                    $proximoNro++;
+                } else {
+                    break;
+                }
+            }
+
+
             $dados = [
                 'title' => 'Cadastrar Grupo de Campo',
                 'gruposDeCampo' => null,
                 'congregacoes' => Congregacao::all(),
+                'proximoNro' => $proximoNro,
             ];
 
             return view('grupos-campo.grupos-campo-create', $dados);
@@ -46,6 +62,7 @@ class GruposDeCampoController extends Controller
                 [
                     'congregacao_id' => 'required|string|max:255',
                     'nome' => 'required|string|max:255',
+                    'nro' => 'required|integer|unique:grupos_de_campo|max:255',
                 ],
                 [
                     'congregacao_id.required' => 'O campo Congregação é obrigatório.',
@@ -54,6 +71,11 @@ class GruposDeCampoController extends Controller
                     'nome.required' => 'O campo nome do grupo é obrigatório.',
                     'nome.string' => 'O campo nome do grupo deve ser uma string.',
                     'nome.max' => 'O campo nome do grupo não pode ter mais de 255 caracteres.',
+                    'nro.required' => 'O campo número é obrigatório.',
+                    'nro.integer' => 'O campo número deve ser um número inteiro.',
+                    'nro.max' => 'O campo número não pode ter mais de 255 caracteres.',
+                    'nro.unique' => 'O número já está em uso.',
+
                 ]
             );
             GruposDeCampo::create($validatedData);
@@ -63,6 +85,7 @@ class GruposDeCampoController extends Controller
             return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
+
 
 
     public function show($id)
@@ -103,6 +126,8 @@ class GruposDeCampoController extends Controller
                 [
                     'congregacao_id' => 'required|string|max:255',
                     'nome' => 'required|string|max:255',
+                    'nro' => 'required|integer|unique:grupos_de_campo|max:255',
+
                 ],
                 [
                     'congregacao_id.required' => 'O campo Congregação é obrigatório.',
@@ -111,6 +136,11 @@ class GruposDeCampoController extends Controller
                     'nome.required' => 'O campo nome do grupo é obrigatório.',
                     'nome.string' => 'O campo nome do grupo deve ser uma string.',
                     'nome.max' => 'O campo nome do grupo não pode ter mais de 255 caracteres.',
+                    'nro.required' => 'O campo número é obrigatório.',
+                    'nro.integer' => 'O campo número deve ser um número inteiro.',
+                    'nro.max' => 'O campo número não pode ter mais de 255 caracteres.',
+                    'nro.unique' => 'O número já está em uso.',
+
                 ]
             );
             $gruposDeCampo = GruposDeCampo::findOrFail($id);
@@ -127,7 +157,28 @@ class GruposDeCampoController extends Controller
     public function destroy($id)
     {
         try {
-            GruposDeCampo::where('id', Crypt::decrypt($id))->delete();
+
+            // Descriptografa o ID
+            $decryptedId = Crypt::decrypt($id);
+
+            // Busca o grupo a ser deletado
+            $grupo = GruposDeCampo::findOrFail($decryptedId);
+
+            // Salva o número do grupo que será deletado
+            $nroDeletado = $grupo->nro;
+
+            // Deleta o grupo
+            $grupo->delete();
+            // Atualiza os números dos grupos com nro maior que o deletado
+            GruposDeCampo::where('nro', '>', $nroDeletado)
+                ->orderBy('nro', 'asc')
+                ->get()
+                ->each(function ($grupo) {
+                    $grupo->nro -= 1;
+                    $grupo->save();
+                });
+
+
             return redirect()->route('grupos-campo')->with('success', 'Grupo de Campo excluído com sucesso.');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
@@ -137,6 +188,7 @@ class GruposDeCampoController extends Controller
             return redirect()->route('grupos-campo')->with('error', 'Não foi possível carregar a lista de grupos de campo.');
         }
     }
+
 
     public function gerarPDFIndividual($id)
     {
@@ -150,7 +202,7 @@ class GruposDeCampoController extends Controller
 
 
             $pdf = PDF::loadView('grupos-campo.grupos-campo-report-individual', $data);
-            return $pdf->download('grupos-campo-report-' . $gruposDeCampo->id . '.pdf');
+            return $pdf->download('Grupo de Campo ' . $gruposDeCampo->nro . ' - ' . $gruposDeCampo->nome . '.pdf');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
             return redirect()->route('grupos-campo.grupos-campo')->with('error', 'ID inválido.');
@@ -163,7 +215,7 @@ class GruposDeCampoController extends Controller
     public function gerarPDF()
     {
         try {
-            $gruposDeCampo = GruposDeCampo::all();
+            $gruposDeCampo = GruposDeCampo::orderBy('nro')->get();
             $title = 'Grupos de Campo';
             $data = [
                 'title' => $title,
@@ -171,7 +223,7 @@ class GruposDeCampoController extends Controller
             ];
 
             $pdf = PDF::loadView('grupos-campo.grupos-campo-report-all', $data);
-            return $pdf->download('grupos-campo-report-all.pdf');
+            return $pdf->download('Lista de Grupos de Campo.pdf');
         } catch (\Exception $e) {
             Log::error('Erro ao gerar PDF de grupos de campo: ' . $e->getMessage());
             return response()->json([

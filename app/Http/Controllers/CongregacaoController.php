@@ -60,12 +60,12 @@ class CongregacaoController extends Controller
                 ]
             );
             Congregacao::create($validateData);
-            return redirect()->route('congregacao.congregacao')->with('success', 'Congregação cadastrada com sucesso!');
+            return redirect()->route('congregacao')->with('success', 'Congregação cadastrada com sucesso!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('Erro ao cadastrar congregação: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'Não foi possível cadastrar a congregação.');
+            return redirect()->route('congregacao')->with('error', 'Não foi possível cadastrar a congregação.');
         }
     }
     public function show($id)
@@ -130,12 +130,12 @@ class CongregacaoController extends Controller
             );
             $congregacao = Congregacao::findOrFail($id);
             $congregacao->update($validateData);
-            return redirect()->route('congregacao.congregacao')->with('success', 'Congregação atualizada com sucesso!');
+            return redirect()->route('congregacao')->with('success', 'Congregação atualizada com sucesso!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('Erro ao atualizar congregação: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'Não foi possível atualizar a congregação.');
+            return redirect()->route('congregacao')->with('error', 'Não foi possível atualizar a congregação.');
         }
     }
     // rota de exclusão de dados
@@ -143,13 +143,13 @@ class CongregacaoController extends Controller
     {
         try {
             Congregacao::where('id', Crypt::decrypt($id))->delete();
-            return redirect()->route('congregacao.congregacao')->with('success', 'Congregação excluída com sucesso!');
+            return redirect()->route('congregacao')->with('success', 'Congregação excluída com sucesso!');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'ID inválido.');
+            return redirect()->route('congregacao')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao excluir congregação: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'Não foi possível excluir a congregação.');
+            return redirect()->route('congregacao')->with('error', 'Não foi possível excluir a congregação.');
         }
     }
 
@@ -167,13 +167,13 @@ class CongregacaoController extends Controller
             $pdf = PDF::loadView('congregacao.congregacao-report-individual', $data);
 
             // Retorna o PDF para download
-            return $pdf->download('report-' . $congregacao->id . '.pdf');
+            return $pdf->download('Congregação-' . $congregacao->id . '-' . $congregacao->nome . '.pdf');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'ID inválido.');
+            return redirect()->route('congregacao')->with('error', 'ID inválido.');
         } catch (\Exception $e) {
             Log::error('Erro ao gerar o PDF: ' . $e->getMessage());
-            return redirect()->route('congregacao.congregacao')->with('error', 'Não foi possível gerar o PDF.');
+            return redirect()->route('congregacao')->with('error', 'Não foi possível gerar o PDF.');
         }
     }
 
@@ -194,7 +194,7 @@ class CongregacaoController extends Controller
             $pdf = PDF::loadView('congregacao.congregacao-report-all', $data);
 
             // Retorna o PDF para download
-            return $pdf->download('congregacao-report-all.pdf');
+            return $pdf->download('Lista de congregações.pdf');
         } catch (\Exception $e) {
             // Loga a exceção para análise futura
             Log::error('Erro ao gerar o PDF: ' . $e->getMessage());

@@ -27,7 +27,7 @@
         <tr>
             <td>{{$congregacao->circuito}}</td>
             <td>{{$congregacao->supteCircuito}}</td>
-            <td>{{$congregacao->telefoneSupteCircuito}}</td>
+            <td>{{$congregacao->telefone_supte_circuito_formatted}}</td>
         </tr>
     </tbody>
     <tfoot>

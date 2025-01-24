@@ -84,18 +84,18 @@
             <div class="form-group col-10">
                 <label for="privilegios">Privilégios</label><br>
                 <div class="form-check form-check-inline col-2">
-                    <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="anciao"
-                        {{ (is_array(old('privilegios')) && in_array('anciao', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('anciao', $publicador->privilegios)) ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" id="privilegio1" name="privilegios[]" value="Ancião"
+                        {{ (is_array(old('privilegios')) && in_array('Ancião', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('Ancião', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio1">Ancião</label>
                 </div>
                 <div class="form-check form-check-inline col-4">
-                    <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="servo_ministerial"
-                        {{ (is_array(old('privilegios')) && in_array('servo_ministerial', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('servo_ministerial', $publicador->privilegios)) ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" id="privilegio2" name="privilegios[]" value="Servo Ministerial"
+                        {{ (is_array(old('privilegios')) && in_array('Servo Ministerial', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('Servo Ministerial', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio2">Servo Ministerial</label>
                 </div>
                 <div class="form-check form-check-inline col-4">
-                    <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="pioneiro_regular"
-                        {{ (is_array(old('privilegios')) && in_array('pioneiro_regular', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('pioneiro_regular', $publicador->privilegios)) ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" id="privilegio3" name="privilegios[]" value="Pioneiro Regular"
+                        {{ (is_array(old('privilegios')) && in_array('Pioneiro Regular', old('privilegios'))) || (isset($publicador) && is_array($publicador->privilegios) && in_array('Pioneiro Regular', $publicador->privilegios)) ? 'checked' : '' }}>
                     <label class="form-check-label" for="privilegio3">Pioneiro Regular</label>
                 </div>
             </div>

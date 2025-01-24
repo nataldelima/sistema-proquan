@@ -35,7 +35,8 @@
                 </tr>
                 <tr>
                     <th>Tel. do Supte de Circuito:</th>
-                    <td>{{ $congregacao->telefoneSupteCircuito }}</td>
+
+                    <td>{{ $congregacao->telefone_supte_circuito_formatted }}</td>
                 </tr>
 
             </table>

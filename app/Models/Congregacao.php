@@ -18,4 +18,10 @@ class Congregacao extends Model
         'supteCircuito',
         'telefoneSupteCircuito',
     ];
+
+
+    public function getTelefoneSupteCircuitoFormattedAttribute()
+    {
+        return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $this->telefoneSupteCircuito);
+    }
 }

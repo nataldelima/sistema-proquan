@@ -13,9 +13,9 @@
     @else
     <div class="row">
         <div class="col">
-            <table class="table table-striped mt-5">
+            <table class="table table-striped mt-5 align-middle">
                 <tr>
-                    <th class="text-center fs-3" colspan="4">{{ $publicadores->primeiroNome.' '.$publicadores->nomeMeio.' '.$publicadores->sobrenome  }}</th>
+                    <th class="text-center fs-3" colspan="6">{{ $publicadores->primeiroNome.' '.$publicadores->nomeMeio.' '.$publicadores->sobrenome  }}</th>
                 </tr>
                 <tr>
                     <th class="fs-5">Endereço</th>
@@ -35,14 +35,11 @@
                 <tr>
                     <th class="fs-5">Sexo</th>
                     <td>{{ $publicadores->sexo }}</td>
-                </tr>
-                <tr>
+
                     <th class="fs-5">Grupo de Campo</th>
-                    <td>{{ $publicadores->grupos_de_campo_id}}</td>
-                </tr>
-                <tr>
+                    <td>{{ $publicadores->grupoDeCampo->nome }}</td>
                     <th class="fs-5">Privilégios</th>
-                    <td>{{ $publicadores->privilegios ? $publicadores->privilegios : ' '}}</td>
+                    <td>{{ $publicadores->privilegios ? implode(', ', $publicadores->privilegios) : ' '}}</td>
                 </tr>
                 <tr>
                     <th class="fs-5">Contato de Emergência</th>

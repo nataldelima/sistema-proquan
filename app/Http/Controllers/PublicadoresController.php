@@ -7,6 +7,7 @@ use App\Models\Publicadores;
 use App\Models\GruposDeCampo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PublicadoresController extends Controller
 {
@@ -16,7 +17,7 @@ class PublicadoresController extends Controller
 
         try {
             $title = 'Lista de Publicadores';
-            $publicadores = Publicadores::all();
+            $publicadores = Publicadores::orderBy('primeiroNome')->get();
             $gruposDeCampo = GruposDeCampo::all();
             return view('publicadores.publicadores', compact('publicadores', 'title', 'gruposDeCampo'));
         } catch (\Exception $e) {
@@ -206,6 +207,51 @@ class PublicadoresController extends Controller
         } catch (\Exception $e) {
             Log::error('Erro ao excluir publicador: ' . $e->getMessage());
             return redirect()->route('publicadores')->with('error', 'Não foi possível excluir o publicador.');
+        }
+    }
+
+    public function gerarPDFIndividual($id)
+    {
+        try {
+            $publicadores = Publicadores::where('id', Crypt::decrypt($id))->first();
+            $title = 'Dados do Publicador';
+            $data = [
+                'title' => $title,
+                'publicadores' => $publicadores,
+                'gruposDeCampo' => [
+                    'gruposDeCampo' => GruposDeCampo::find($publicadores->grupos_de_campo_id)
+                ],
+            ];
+
+
+            $pdf = PDF::loadView('publicadores.publicadores-report-individual', $data);
+            return $pdf->download($publicadores->primeiroNome . ' ' . $publicadores->sobrenome . '.pdf');
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());
+            return redirect()->route('publicadores')->with('error', 'ID inválido.');
+        } catch (\Exception $e) {
+            Log::error('Erro ao gerar PDF: ' . $e->getMessage());
+            return redirect()->route('publicadores')->with('error', 'Não foi possível gerar o PDF.');
+        }
+    }
+
+    public function gerarPDF()
+    {
+        try {
+            $gruposDeCampo = GruposDeCampo::orderBy('nro')->get();
+            $title = 'Grupos de Campo';
+            $data = [
+                'title' => $title,
+                'gruposDeCampo' => $gruposDeCampo
+            ];
+
+            $pdf = PDF::loadView('grupos-campo.grupos-campo-report-all', $data);
+            return $pdf->download('Lista de Grupos de Campo.pdf');
+        } catch (\Exception $e) {
+            Log::error('Erro ao gerar PDF de grupos de campo: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Houve um erro ao gerar o PDF. Por favor, tente novamente mais tarde.'
+            ], 500);
         }
     }
 }

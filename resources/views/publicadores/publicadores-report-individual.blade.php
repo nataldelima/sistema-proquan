@@ -16,15 +16,15 @@
                 </tr>
                 <tr>
                     <th>Grupo de campo:</th>
-                    <td>{{ $publicadores->gruposDeCampo }}</td>
+                    <td>{{ $publicadores->grupoDeCampo->nome}}</td>
                 </tr>
                 <tr>
                     <th>Data de Nascimento:</th>
-                    <td>{{ $publicadores->dataNascimento  }}</td>
+                    <td>{{ Carbon\Carbon::parse($publicadores->dataNascimento)->format('d/m/Y') }}</td>
                 </tr>
                 <tr>
                     <th>Data de Batismo:</th>
-                    <td>{{ $publicadores->dataBatismo   }}</td>
+                    <td>{{ Carbon\Carbon::parse($publicadores->dataBatismo)->format('d/m/Y')    }}</td>
                 </tr>
             </table>
         </div>

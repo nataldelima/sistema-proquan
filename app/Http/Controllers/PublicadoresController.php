@@ -214,17 +214,16 @@ class PublicadoresController extends Controller
     {
         try {
             $publicadores = Publicadores::where('id', Crypt::decrypt($id))->first();
-            $title = 'Dados do Publicador';
+
             $data = [
-                'title' => $title,
+                'title' => 'Dados do Publicador',
                 'publicadores' => $publicadores,
-                'gruposDeCampo' => [
-                    'gruposDeCampo' => GruposDeCampo::find($publicadores->grupos_de_campo_id)
-                ],
+
             ];
 
 
             $pdf = PDF::loadView('publicadores.publicadores-report-individual', $data);
+
             return $pdf->download($publicadores->primeiroNome . ' ' . $publicadores->sobrenome . '.pdf');
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             Log::error('Erro ao descriptografar o ID: ' . $e->getMessage());

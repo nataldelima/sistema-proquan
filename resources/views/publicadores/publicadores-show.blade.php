@@ -25,7 +25,7 @@
                 </tr>
                 <tr>
                     <th class="fs-5">Telefone</th>
-                    <td>{{ $publicadores->telefone }}</td>
+                    <td>{{ $publicadores->telefone_formatted }}</td>
                     <th class="fs-5">Data de Nascimento</th>
                     <td>{{ date('d/m/Y', strtotime($publicadores->dataNascimento)) }}</td>
 
@@ -45,7 +45,7 @@
                     <th class="fs-5">Contato de Emergência</th>
                     <td>{{ $publicadores->contatoEmergencia }}</td>
                     <th class="fs-5">Telefone do Contato de Emergência</th>
-                    <td>{{ $publicadores->telContatoEmergencia }}</td>
+                    <td>{{ $publicadores->tel_contato_emergencia_formatted }}</td>
                     <th class="fs-5">É Testemunha de Jeová?</th>
                     <td>{{ $publicadores->contatoEmergenciaEhTj ? 'Sim' : 'Nao' }}</td>
                 </tr>

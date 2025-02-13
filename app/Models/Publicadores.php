@@ -38,4 +38,14 @@ class Publicadores extends Model
     {
         return $this->belongsTo(GruposDeCampo::class, 'grupos_de_campo_id');
     }
+
+    public function getTelefoneFormattedAttribute()
+    {
+        return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $this->telefone);
+    }
+
+    public function getTelContatoEmergenciaFormattedAttribute()
+    {
+        return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $this->telContatoEmergencia);
+    }
 }

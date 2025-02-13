@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Publicadores;
 use App\Models\GruposDeCampo;
+use App\Models\Congregacao;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -237,17 +238,19 @@ class PublicadoresController extends Controller
     public function gerarPDF()
     {
         try {
-            $gruposDeCampo = GruposDeCampo::orderBy('nro')->get();
-            $title = 'Grupos de Campo';
+            $publicadores = Publicadores::with('grupodecampo.congregacao')->orderBy('primeiroNome')->get();
+            $title = 'Lista de Publicadores';
             $data = [
                 'title' => $title,
-                'gruposDeCampo' => $gruposDeCampo
+                'publicadores' => $publicadores,
+                'congregacao' => Congregacao::all(),
+                'gruposDeCampo' => GruposDeCampo::all(),
             ];
+            $pdf = PDF::loadView('publicadores.publicadores-report-all', $data);
 
-            $pdf = PDF::loadView('grupos-campo.grupos-campo-report-all', $data);
-            return $pdf->download('Lista de Grupos de Campo.pdf');
+            return $pdf->download('Lista de Publicadores.pdf');
         } catch (\Exception $e) {
-            Log::error('Erro ao gerar PDF de grupos de campo: ' . $e->getMessage());
+            Log::error('Erro ao gerar PDF de Publicadores: ' . $e->getMessage());
             return response()->json([
                 'error' => 'Houve um erro ao gerar o PDF. Por favor, tente novamente mais tarde.'
             ], 500);
